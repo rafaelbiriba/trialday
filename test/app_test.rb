@@ -40,4 +40,14 @@ class TestApp < Test::Unit::TestCase
     post "/bla", response
     assert_equal last_response.body, response
   end
+
+  test "should return 200 for GET /bla2" do
+    get "/bla"
+    assert last_response.ok?
+  end
+
+  test "should return 501 POST GET /bla2" do
+    post "/bla2"
+    assert_equal last_response.status, 501
+  end
 end

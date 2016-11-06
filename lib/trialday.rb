@@ -23,13 +23,25 @@ end
 def create_resouce_action action
   Proc.new do |env|
     request = Rack::Request.new(env)
-    response_200(request, action)
+    response(request, action)
   end
 end
 
-def response_200 request, action
+def response request, action
   request_body = request.body.read
   params = JSON.parse(request_body).insensitive unless request_body.empty?
-  response = action[request.request_method.downcase]
-  [200, {"Content-Type" => "application/json"}, [response.call(params).to_json]]
+  response_block = action[request.request_method.downcase]
+  if response_block.nil?
+    response_501
+  else
+    response_200(response_block.call(params).to_json)
+  end
+end
+
+def response_200 content
+  [200, {"Content-Type" => "application/json"}, [content]]
+end
+
+def response_501
+  [501, {"Content-Type" => "text/plain"}, ["Not Implemented"]]
 end

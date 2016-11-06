@@ -9,3 +9,7 @@ post "/bla" do |params|
 
   { name: name }
 end
+
+get "/bla2" do |params|
+  {}
+end
