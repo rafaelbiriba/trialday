@@ -17,7 +17,7 @@ class TestApp < Test::Unit::TestCase
 
   test "should return content type json for GET /bla" do
     get "/bla"
-    assert_equal last_response.headers['Content-Type'], "application/json"
+    assert_equal last_response.headers['Content-Type'], "application/josn"
   end
 
   test "should return a json 1,2,3 for GET /bla" do
@@ -32,7 +32,7 @@ class TestApp < Test::Unit::TestCase
 
   test "should return content type json for POST /bla" do
     post "/bla", {name: "123"}.to_json
-    assert_equal last_response.headers['Content-Type'], "application/json"
+    assert_equal last_response.headers['Content-Type'], "application/josn"
   end
 
   test "should return the param name for POST /bla" do
