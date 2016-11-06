@@ -26,18 +26,18 @@ class TestApp < Test::Unit::TestCase
   end
 
   test "should return 200 for POST /bla" do
-    post "/bla", name: "123"
+    post "/bla", {name: "123"}.to_json
     assert last_response.ok?
   end
 
   test "should return content type json for POST /bla" do
-    post "/bla", name: "123"
+    post "/bla", {name: "123"}.to_json
     assert_equal last_response.headers['Content-Type'], "application/json"
   end
 
   test "should return the param name for POST /bla" do
-    response = { "name" => "123" }
+    response = { "name" => "123" }.to_json
     post "/bla", response
-    assert_equal last_response.body, response.to_json
+    assert_equal last_response.body, response
   end
 end

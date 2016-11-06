@@ -28,7 +28,8 @@ def create_resouce_action action
 end
 
 def response_200 request, action
-  params = request.params.insensitive
+  request_body = request.body.read
+  params = JSON.parse(request_body).insensitive unless request_body.empty?
   response = action[request.request_method.downcase]
   [200, {"Content-Type" => "application/json"}, [response.call(params).to_json]]
 end
