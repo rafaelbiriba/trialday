@@ -8,10 +8,11 @@ end
 ["get", "post"].each do |method|
   define_method method do |path, &block|
     (resources[path] ||= {}).merge!({ method => block })
+    build_routes
   end
 end
 
-def start
+def build_routes
   routes = {}
   resources.each do |resource, action|
     routes[resource] = Proc.new do |env|
