@@ -15,12 +15,16 @@ end
 def build_routes
   routes = {}
   resources.each do |resource, action|
-    routes[resource] = Proc.new do |env|
-      request = Rack::Request.new(env)
-      response_200(request, action)
-    end
+    routes[resource] = create_resouce_action(action)
   end
   run Rack::URLMap.new routes
+end
+
+def create_resouce_action action
+  Proc.new do |env|
+    request = Rack::Request.new(env)
+    response_200(request, action)
+  end
 end
 
 def response_200 request, action
