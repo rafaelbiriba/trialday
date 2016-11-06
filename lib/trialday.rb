@@ -5,12 +5,10 @@ def resources
   @resources ||= {}
 end
 
-def get path, &block
-  (resources[path] ||= {}).merge!({ "get" => block })
-end
-
-def post path, &block
-  (resources[path] ||= {}).merge!({ "post" => block })
+["get", "post"].each do |method|
+  define_method method do |path, &block|
+    (resources[path] ||= {}).merge!({ method => block })
+  end
 end
 
 def start
@@ -19,11 +17,7 @@ def start
     routes[resource] = Proc.new do |env|
       request = Rack::Request.new(env)
       params = request.params.insensitive
-      if request.get?
-        response_200(params, &action["get"])
-      elsif request.post?
-        response_200(params, &action["post"])
-      end
+      response_200(params, &action[request.request_method.downcase])
     end
   end
   run Rack::URLMap.new routes
