@@ -16,13 +16,14 @@ def start
   resources.each do |resource, action|
     routes[resource] = Proc.new do |env|
       request = Rack::Request.new(env)
-      params = request.params.insensitive
-      response_200(params, &action[request.request_method.downcase])
+      response_200(request, action)
     end
   end
   run Rack::URLMap.new routes
 end
 
-def response_200 params, &response
+def response_200 request, action
+  params = request.params.insensitive
+  response = action[request.request_method.downcase]
   [200, {"Content-Type" => "application/json"}, [response.call(params).to_json]]
 end
